@@ -3,12 +3,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 import java.sql.Time;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Comment {
@@ -16,21 +16,26 @@ public class Comment {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Integer id;
 	
+	@ManyToOne
 	private User user;
+	
 	private String text;
 	private String title;
 	private Time dateTime;
-	private Comment comment[];
+	
+    @OneToMany
+	private List<Comment> comments;
 	
 	
-	public Comment(User user, String text, Time dateTime, Comment[] comment) {
+    
+	
+	public Comment(User user, String text, Time dateTime, List<Comment> comments) {
 		super();
 		this.user = user;
 		this.text = text;
 		this.dateTime = dateTime;
-		this.comment = comment;
+		this.comments = comments;
 	}
-	
 	public Comment(User user, String text, String title, Time dateTime) {
 		super();
 		this.user = user;
@@ -68,12 +73,10 @@ public class Comment {
 	public void setDateTime(Time dateTime) {
 		this.dateTime = dateTime;
 	}
-	public Comment[] getComment() {
-		return comment;
+	public List<Comment> getComments() {
+		return comments;
 	}
-	public void setComment(Comment[] comment) {
-		this.comment = comment;
+	public void setComments(List<Comment> comments) {
+		this.comments = comments;
 	}
-	
-	
 }
