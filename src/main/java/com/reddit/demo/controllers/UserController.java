@@ -3,14 +3,19 @@ package com.reddit.demo.controllers;
 import com.reddit.demo.entities.*;
 import com.reddit.demo.repos.UserRepo;
 
+import java.net.http.HttpResponse;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -43,14 +48,17 @@ public class UserController {
 	  }
   }
   
-  @PutMapping(path="/update")
-  public @ResponseBody Optional<User> updateUser(@RequestParam int id, @RequestParam String userName, @RequestParam String password) {
-		  Optional<User> user = userRepository.findById(id);
-		  User editUser = user.get();
-		  editUser.setUserName(userName);
-		  editUser.setPassword(password);
+  @PutMapping(path="/update", produces = MediaType.APPLICATION_JSON_VALUE)
+  public @ResponseBody ResponseEntity<String> updateUser(@RequestBody User user) {
+	  Optional<User> oldUser = userRepository.findById(user.getId());
+	  if (oldUser.isPresent()) {
+		  User editUser = oldUser.get();
+		  editUser.setUserName(user.getUserName());
+		  editUser.setPassword(user.getPassword());
 		  userRepository.save(editUser);
-		  return userRepository.findById(editUser.getId());
+		  return new ResponseEntity<>("User Updated", HttpStatus.OK);
+	  }
+	  return new ResponseEntity<>("Update Failed", HttpStatus.OK);
   }
   
   @GetMapping(path="/select")
