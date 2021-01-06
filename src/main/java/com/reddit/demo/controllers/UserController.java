@@ -29,9 +29,16 @@ public class UserController {
   private UserRepo userRepository;
 
   @PostMapping(path="/create")
-  public @ResponseBody ResponseEntity<User> createUser (@RequestBody User user) {
-    userRepository.save(user);
-	return new ResponseEntity<>(user, HttpStatus.OK);
+  public @ResponseBody ResponseEntity<String> createUser (@RequestBody User user) {
+	  
+	  if (userRepository.findUserByUserName(user.getUserName()).isPresent()) {
+		return new ResponseEntity<>("Username is already in use", HttpStatus.OK);
+	  } else if (userRepository.findUserByEmail(user.getEmail()).isPresent()) {
+		return new ResponseEntity<>("Email is already in use", HttpStatus.OK);
+	  } else {
+	   userRepository.save(user);
+	   return new ResponseEntity<>("Success", HttpStatus.OK);
+	  }
   }
 
   @GetMapping(path="/all")
