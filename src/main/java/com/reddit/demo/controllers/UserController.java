@@ -26,11 +26,10 @@ public class UserController {
   @Autowired
   private UserRepo userRepository;
 
-  @PostMapping(path="/add")
-  public @ResponseBody String addNewUser (@RequestParam String userName, @RequestParam String password) {
-    User n = new User(userName, password);
-    userRepository.save(n);
-    return "Saved";
+  @PostMapping(path="/create")
+  public @ResponseBody ResponseEntity<User> createUser (@RequestBody User user) {
+    userRepository.save(user);
+	return new ResponseEntity<>(user, HttpStatus.OK);
   }
 
   @GetMapping(path="/all")
