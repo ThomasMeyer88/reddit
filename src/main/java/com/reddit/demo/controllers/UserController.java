@@ -29,15 +29,15 @@ public class UserController {
   private UserRepo userRepository;
 
   @PostMapping(path="/create")
-  public @ResponseBody ResponseEntity<String> createUser (@RequestBody User user) {
+  public @ResponseBody ResponseEntity<CustomResponse> createUser (@RequestBody User user) {
 	  
 	  if (userRepository.findUserByUserName(user.getUserName()).isPresent()) {
-		return new ResponseEntity<>("Username is already in use", HttpStatus.OK);
+		return new ResponseEntity<>(new CustomResponse("Username is already in use.", true), HttpStatus.OK);
 	  } else if (userRepository.findUserByEmail(user.getEmail()).isPresent()) {
-		return new ResponseEntity<>("Email is already in use", HttpStatus.OK);
+		return new ResponseEntity<>(new CustomResponse("Email is already in use.", true), HttpStatus.OK);
 	  } else {
 	   userRepository.save(user);
-	   return new ResponseEntity<>("Success", HttpStatus.OK);
+	   return new ResponseEntity<>(new CustomResponse("User successfully created.", false), HttpStatus.OK);
 	  }
   }
 
