@@ -59,6 +59,9 @@ public class User {
 		this.email = email;
 	}
 	
+	public Boolean isValid(User user) {
+		return (user.getEmail() == null || user.getPassword() == null || user.getUserName() == null);
+	}
 	
 
 }

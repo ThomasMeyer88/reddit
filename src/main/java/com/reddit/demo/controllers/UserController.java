@@ -28,8 +28,16 @@ public class UserController {
   @Autowired
   private UserRepo userRepository;
 
+//  @GetMapping(path="/validateLogin", produces = "application/json")
+//  public @ResponseBody ResponseEntity<User> validateLogin() {
+//		return new ResponseEntity<>(new User("javainuse", "password", "demo@gmail.com"), HttpStatus.OK);
+//  }
+  
   @PostMapping(path="/create")
   public @ResponseBody ResponseEntity<CustomResponse> createUser (@RequestBody User user) {
+	  if (user.isValid(user)) {
+		  return new ResponseEntity<>(new CustomResponse("Invalid Data Please Try Again", true), HttpStatus.OK);
+	  }
 	  
 	  if (userRepository.findUserByUserName(user.getUserName()).isPresent()) {
 		return new ResponseEntity<>(new CustomResponse("Username is already in use.", true), HttpStatus.OK);
@@ -37,7 +45,7 @@ public class UserController {
 		return new ResponseEntity<>(new CustomResponse("Email is already in use.", true), HttpStatus.OK);
 	  } else {
 	   userRepository.save(user);
-	   return new ResponseEntity<>(new CustomResponse("User successfully created.", false), HttpStatus.OK);
+	   return new ResponseEntity<>(new CustomResponse(user.getUserName(), false), HttpStatus.OK);
 	  }
   }
 
