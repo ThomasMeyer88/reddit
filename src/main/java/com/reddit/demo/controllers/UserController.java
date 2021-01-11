@@ -3,7 +3,6 @@ package com.reddit.demo.controllers;
 import com.reddit.demo.entities.*;
 import com.reddit.demo.repos.UserRepo;
 
-import java.net.http.HttpResponse;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,10 +27,10 @@ public class UserController {
   @Autowired
   private UserRepo userRepository;
 
-//  @GetMapping(path="/validateLogin", produces = "application/json")
-//  public @ResponseBody ResponseEntity<User> validateLogin() {
-//		return new ResponseEntity<>(new User("javainuse", "password", "demo@gmail.com"), HttpStatus.OK);
-//  }
+  @GetMapping(path="/validateLogin", produces = "application/json")
+  public @ResponseBody ResponseEntity<User> validateLogin() {
+		return new ResponseEntity<>(new User("javainuse", "password", "demo@gmail.com"), HttpStatus.OK);
+  }
   
   @PostMapping(path="/create")
   public @ResponseBody ResponseEntity<CustomResponse> createUser (@RequestBody User user) {
